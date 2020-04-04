@@ -34,7 +34,7 @@ class Crawler:
     def __init__(self):
         self.search_addr = "/search"
 
-    def search(self, params, url=None):
+    def search(self, params, sub_url=None):
         if url is None:
             url = self.base_url+self.search_addr
         response = requests.get(url, params=params, headers={'User-Agent':random.choice(HEADERS)})
@@ -44,9 +44,10 @@ https://www.cnn.com/interactive/2020/health/coronavirus-us-maps-and-cases/
 
 class CNNCrawler(Crawler):
     base_url = "https://www.cnn.com"
+    default_sub_url = "/interactive/2020/health/coronavirus-us-maps-and-cases/"
 
-    def search_today(self, query):
-        return self.search({"q":query,"size":10,"sort":"newest"})
+    def __init__(self):
+        self.
 
     def search(self, params):
         soup = super().search(params)
@@ -77,4 +78,4 @@ class CNNCrawler(Crawler):
         
         return news
 
-
+if __name__ == '__main__':
