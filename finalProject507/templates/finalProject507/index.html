@@ -1,0 +1,65 @@
+{% extends "base_bootstrap.html" %}
+{% load static %} 
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_507.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section id = 'home'>
+  <div class="container">
+    <div class="head-space"></div>
+
+    <div class="title-wrapper">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h1 class="display-4">COVID-19 data</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="project-wrapper">
+          <a href="{% url 'fp507:data' %}">
+            <div class="view">
+              <img class="img-fluid" src="{% static 'imgs/507/curve.png' %}" alt="curve">
+              <div id="circle-mask" class="mask flex-center rgba-black-strong">
+                  <p class="lead text-center text-white">Cases in U.S.A<br>From N.Y. Times<br>Not for commercial.</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="project-wrapper">
+          <a href="{% url 'fp507:news' %}">
+            <div class="view">
+              <img class="img-fluid" src="{% static 'imgs/507/gov.png' %}" alt="gov">
+              <div id="circle-mask" class="mask flex-center rgba-black-strong">
+                  <p class="lead text-center text-white">Government<br> Announcements</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  window.onload = fitSize;
+  window.onresize = fitSize;
+  function fitSize(){
+    var body = (document.compatMode && document.compatMode == 'CSS1Compat') ? document.documentElement : document.body;
+    if (body.offsetHeight < window.innerHeight) {
+      document.getElementById("home").style.height = "calc(100vh - 126px)";
+    }
+    else {
+      document.getElementById("home").style.height = "";
+    }
+  };
+</script>
+{% endblock %}

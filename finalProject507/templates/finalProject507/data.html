@@ -1,0 +1,121 @@
+{% extends "base_bootstrap.html" %}
+{% load static %} 
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_507.css' %}">
+{% endblock %}
+
+{% block navcol %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'fp507:home' %}">Back</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+<section id = 'home'>
+  <div class="container">
+    <div class="head-space"></div>
+
+    <div class="title-wrapper">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h1 class="display-4">COVID-19 State Government Announcements</h1>
+          <h4 class="lead">Information is from New Your Times open source project.<br> This site is not for commercial use.</h4>
+          <a href="https://github.com/nytimes/covid-19-data">
+            <button type="button" class="btn btn-primary">Download here</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <form>
+          <div class="form-row align-items-center">
+            <div class="col">
+              <select class="form-control" id="states_selection" name="state">
+                <!-- <option>All States</option> -->
+                {% for state in states %}
+                  <option>{{state}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col">
+              <input type="text" id="datepicker1" class="form-control" placeholder="From..." autocomplete="off" name="from">
+              <script>
+                  $("#datepicker1").datepicker({
+                    format: 'yyyy-mm-dd',
+                    minDate:0,
+                    endDate:'-1d',
+                });
+              </script>
+            </div>
+            <div class="col">
+              <input type="text" id="datepicker2" class="form-control" placeholder="To..." autocomplete="off" name="to">
+              <script>
+                  $("#datepicker2").datepicker({
+                    format: 'yyyy-mm-dd',
+                    minDate:0,
+                    endDate:'-1d',
+                });
+              </script>
+            </div>
+            <div class="col">
+              <select class="form-control" id="mode_selection" name="mode">
+                <option>plot</option>
+                <option>SUM</option>
+              </select>
+            </div>
+            <div class="col-auto my-1">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% if data %}
+    <div class="result-wrapper">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">County</th>
+            <th scope="col">Cases</th>
+            <th scope="col">Death</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for case in data %}
+          <tr>
+            <th scope="row">{{case.county__countyName}}</th>
+            <th scope="row">{{case.cases}}</th>
+            <th scope="row">{{case.deaths}}</th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    {% if plot %}
+    {% autoescape off %}
+    {{ plot }}
+    {% endautoescape %}
+    {% endif %}
+
+  </div>
+</section>
+
+<script>
+  window.onload = fitSize;
+  window.onresize = fitSize;
+  function fitSize(){
+    var body = (document.compatMode && document.compatMode == 'CSS1Compat') ? document.documentElement : document.body;
+    if (body.offsetHeight < window.innerHeight) {
+      document.getElementById("home").style.height = "calc(100vh - 126px)";
+    }
+    else {
+      document.getElementById("home").style.height = "";
+    }
+  };
+</script>
+{% endblock %}

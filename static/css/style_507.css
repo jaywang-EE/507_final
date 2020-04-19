@@ -1,0 +1,55 @@
+#home {
+  background:#e9ecef;
+}
+
+#home .title-wrapper{
+  margin-bottom:5vh;
+}
+
+#home .head-space{
+  height: 100px;
+}
+
+#home a{
+    color: black;
+}
+#home a:hover{
+    text-decoration: none;
+}
+
+.project-wrapper {
+  margin-bottom:5vh;
+}
+
+
+#home img{
+  width: 100%;
+}
+
+#circle-mask {
+  /*border-radius:999em;*/
+  border-radius:50%;
+  transition: all 0.3s linear;
+  opacity: 0;
+}
+#circle-mask:hover {
+  opacity: 1;
+}
+
+a.contact-icon{
+    color:#BBBBBB;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+img{
+    max-width: 100%;
+}
+
+html, body { 
+  scroll-behavior:smooth; 
+}
+
+body { 
+  height: 100%;
+}
