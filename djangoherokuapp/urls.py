@@ -23,7 +23,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('covid/', include('finalProject507.urls')),  # Keep
     path('', include('home.urls')),
-    path('imgShort/', include('store.urls')),
+    #path('imgShort/', include('store.urls')),
     path('admin/', admin.site.urls),  # Keep
     path('accounts/', include('django.contrib.auth.urls')),  # Keep
     #url(r'^signup/$', signup, name='signup'),

@@ -12,12 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-ON_HEROKU = True
-
-if ON_HEROKU:
-    CRONJOBS = [
-        ('0 4 * * *', 'finalProject507.crawlers.crawler.craw_covid_cron')
-    ]
+ON_HEROKU = False
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,7 +28,7 @@ SECRET_KEY = '83sms13cuf()8!vb_(ksx3o+_ziyc7i%=+ac90vq!=$+0l3x9*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["www.jaywangworks.com", "chiamingwang.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["*",]
 
 # Application definition
 
@@ -51,7 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     
     'home.apps.HomeConfig',  
-    'store.apps.StoreConfig',  
+    #'store.apps.StoreConfig',  
     'finalProject507.apps.Finalproject507Config',  
 ]
 
