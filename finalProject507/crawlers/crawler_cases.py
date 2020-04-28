@@ -17,38 +17,38 @@ def update_data_county(data, cache):
     
     max_date = CountyCase.objects.all().aggregate(Max('date'))["date__max"]
 
-    cache = County.objects.distinct("stateName").values("stateName")
-    cache = [row["stateName"] for row in cache]
 
-    if CountyCase.objects.all().count() >= len(data):
-        return cache
-
-    current_date = None
-    for i, row in enumerate(data):
-        if i%100 == 0:
-            print("%d/%d: %s | %d"%((i+1), len(data), row, CountyCase.objects.all().count()))
-        
-        if 1:
-            date, county, state, fips, cases, deaths = row.split(',') 
+    if CountyCase.objects.all().count() < len(data):
+        current_date = None
+        for i, row in enumerate(data):
+            if i%100 == 0:
+                print("%d/%d: %s | %d"%((i+1), len(data), row, CountyCase.objects.all().count()))
             
-            date = datetime.strptime(date, '%Y-%m-%d')
+            try:
+                date, county, state, fips, cases, deaths = row.split(',') 
+                
+                date = datetime.strptime(date, '%Y-%m-%d')
 
-            if (not settings.ON_HEROKU) and max_date and date.date() < max_date:
-                break
+                if (not settings.ON_HEROKU) and max_date and date.date() < max_date:
+                    break
 
-            fips = int(fips) if fips else -1
-            cases = int(cases)
-            deaths = int(deaths)
+                fips = int(fips) if fips else -1
+                cases = int(cases)
+                deaths = int(deaths)
 
-            new_county, created = County.objects.get_or_create(stateName=state, countyName=county,
-                                                               defaults={'fip': fips})
+                new_county, created = County.objects.get_or_create(stateName=state, countyName=county,
+                                                                   defaults={'fip': fips})
 
-            CountyCase.objects.get_or_create(county=new_county, date=date, defaults={"deaths":deaths, "cases":cases})
-        try:
-            pass
-        except:
-            print("ERROR: "+row)
+                CountyCase.objects.get_or_create(county=new_county, date=date, defaults={"deaths":deaths, "cases":cases})
+                
+            except:
+                print("ERROR: "+row)
 
+    cache = County.objects.values("stateName")
+    print(cache)
+    cache = list(set([row["stateName"] for row in cache]))
+    print(cache)
+    
     return cache
 
 def get_county_data(cache):

@@ -43,7 +43,9 @@ def get_soup(url, params=None, is_json=False):
             if is_json:
                 cache["html"][url] = response.json()
             else:
-                cache["html"][url] = BeautifulSoup(response.text, 'html.parser')
+                cache["html"][url] = response.text
+                save_cache(cache)
+                return BeautifulSoup(response.text, 'html.parser')
             save_cache(cache)
 
         return cache["html"][url]

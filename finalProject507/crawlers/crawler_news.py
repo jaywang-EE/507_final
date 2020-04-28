@@ -89,17 +89,16 @@ def craw_gov_newjersey():
 
 def craw_gov_newyork(on_heroku=False, from_days_ago=90):
     # from https://medium.com/@mikelcbrowne/running-chromedriver-with-python-selenium-on-heroku-acc1566d161c
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.binary_location = GOOGLE_CHROME_PATH
 
     from_date = datetime.now() - timedelta(days=from_days_ago)
     url = "https://www1.nyc.gov/office-of-the-mayor/news.page"
     root_url = "https://www1.nyc.gov/office-of-the-mayor/news"
 
-
     if settings.ON_HEROKU:
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.binary_location = GOOGLE_CHROME_PATH
         browser = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
     else:
         browser = webdriver.Chrome(ChromeDriverManager().install())

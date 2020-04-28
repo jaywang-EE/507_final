@@ -22,7 +22,7 @@ from django.views import View
 from finalProject507.models import Order, County, CountyCase
 
 #Aggregation
-from django.db.models import Sum, Max
+from django.db.models import Sum, Max, Min
 
 #plotly
 from plotly.offline import plot
@@ -59,23 +59,29 @@ class DataView(View):
                 data = data.filter(date__lte=toDate)
 
             if data:
-                date = data.order_by('county__stateName', '-date')
+                data = data.order_by('county__stateName', '-date')
 
             mode = request.GET.get('mode')
             print(mode)
-            if mode == "SUM":
+            if fromDate and mode == "Increment":
+                print(data.values('county__countyName', "cases", "date").order_by('county__countyName'))
+                data = data.values('county__countyName') \
+                    .annotate(cases_from=Min('cases'), 
+                              cases_to=Max('cases'), 
+                              deaths_from=Min('deaths'), 
+                              deaths_to=Max('deaths'))
                 print(data)
+                data_formatted = [{'county__countyName': row['county__countyName'], 
+                                   'cases': row['cases_to'] - row['cases_from'], 
+                                   'deaths': row['deaths_to'] - row['deaths_from'],} for row in data]
+                data = sorted(data_formatted, key=lambda row: -row['cases'])
+
+            elif mode in ["SUM", "Increment"]:
                 data = data.values('county__countyName') \
                     .annotate(cases=Max('cases'), deaths=Max('deaths')) \
                     .order_by('-cases')
-            elif mode == "plot":
-                """
-                plot_div = plot([Scatter(x=x_data, y=y_data,
-                                    mode='lines', name='test',
-                                    opacity=0.8, marker_color='green')],
-                           output_type='div')
-                data = go.Data([trace0, trace1])
-                """
+            elif mode in ["plot", "plot top-5"]:
+
                 data = data.values('county__countyName', 'cases', 'deaths', 'date')\
                     .order_by('county__countyName', 'date')
                 print(data)
@@ -89,7 +95,7 @@ class DataView(View):
                     if not current_county:
                         current_county = row["county__countyName"]
                     elif current_county != row["county__countyName"]:#save
-                        traces.append(go.Scatter(x=dates, y=cases, name=current_county,))
+                        traces.append((go.Scatter(x=dates, y=cases, name=current_county,), cases[-1]))
 
                         current_county = None
                         dates  = []
@@ -99,7 +105,16 @@ class DataView(View):
                         current_county = row["county__countyName"]
                     dates.append(row["date"])
                     cases.append(row["cases"])
-                traces.append(go.Scatter(x=dates, y=cases, name=current_county,))
+
+                traces.append((go.Scatter(x=dates, y=cases, name=current_county,), cases[-1]))
+
+                if mode == "plot top-5":
+                    print(traces)
+                    traces = sorted(traces, key=lambda trace: -trace[1])
+                    print(traces)
+                    traces = traces[:5]
+                traces = [trace[0] for trace in traces]
+                print(traces)
 
                 context["plot"] = plot(go.Data(traces), output_type='div')
                 data = None
