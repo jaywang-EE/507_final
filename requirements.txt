@@ -19,6 +19,7 @@ django-icons==1.1.2
 django-meta==1.6.1
 django-social-auth==0.7.28
 djangorestframework==3.11.0
+google-colab==1.0.0
 gunicorn==20.0.4
 heroku==0.1.4
 httplib2==0.17.1
@@ -50,4 +51,3 @@ urllib3==1.24.3
 webdriver-manager==2.3.0
 whitenoise==5.0.1
 wincertstore==0.2
-django-crontab==0.7.1
